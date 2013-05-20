@@ -1,4 +1,6 @@
-<?php /**
+<?php
+
+/**
  * OpenEyes
  *
  * (C) Moorfields Eye Hospital NHS Foundation Trust, 2008-2011
@@ -35,94 +37,143 @@
  * @property User $usermodified
  * @property Asset $asset
  */
+class Element_OphScImagehumphreys_Document extends ElementScannedDocument {
 
-class Element_OphScImagehumphreys_Document extends ElementScannedDocument
-{
-	public $service;
+  public $service;
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @return the static model class
-	 */
-	public static function model($className = __CLASS__)
-	{
-		return parent::model($className);
-	}
+  /**
+   * Returns the static model of the specified AR class.
+   * @return the static model class
+   */
+  public static function model($className = __CLASS__) {
+    return parent::model($className);
+  }
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'et_ophscimagehumphreys_document';
-	}
+  /**
+   * @return string the associated database table name
+   */
+  public function tableName() {
+    return 'et_ophscimagehumphreys_document';
+  }
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('event_id, asset_id, title, description, ', 'safe'),
-			array('asset_id, title, description, ', 'required'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, event_id, asset_id, title, description, ', 'safe', 'on' => 'search'),
-		);
-	}
-	
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-			'element_type' => array(self::HAS_ONE, 'ElementType', 'id','on' => "element_type.class_name='".get_class($this)."'"),
-			'eventType' => array(self::BELONGS_TO, 'EventType', 'event_type_id'),
-			'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
-			'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
-			'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
-			'asset' => array(self::BELONGS_TO, 'Asset', 'asset_id'),
-		);
-	}
+  /**
+   * @return array validation rules for model attributes.
+   */
+  public function rules() {
+    // NOTE: you should only define rules for those attributes that
+    // will receive user inputs.
+    return array(
+        array('event_id, asset_id, title, description, ', 'safe'),
+        array('asset_id, title, description, ', 'required'),
+        // The following rule is used by search().
+        // Please remove those attributes that should not be searched.
+        array('id, event_id, asset_id, title, description, ', 'safe', 'on' => 'search'),
+    );
+  }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'event_id' => 'Event',
-			'asset_id' => 'Asset',
-			'title' => 'title',
-			'description' => 'description',
-		);
-	}
+  /**
+   * @return array relational rules.
+   */
+  public function relations() {
+    // NOTE: you may need to adjust the relation name and the related
+    // class name for the relations automatically generated below.
+    return array(
+        'element_type' => array(self::HAS_ONE, 'ElementType', 'id', 'on' => "element_type.class_name='" . get_class($this) . "'"),
+        'eventType' => array(self::BELONGS_TO, 'EventType', 'event_type_id'),
+        'event' => array(self::BELONGS_TO, 'Event', 'event_id'),
+        'user' => array(self::BELONGS_TO, 'User', 'created_user_id'),
+        'usermodified' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
+        'asset' => array(self::BELONGS_TO, 'Asset', 'asset_id'),
+    );
+  }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+  /**
+   * @return array customized attribute labels (name=>label)
+   */
+  public function attributeLabels() {
+    return array(
+        'id' => 'ID',
+        'event_id' => 'Event',
+        'asset_id' => 'Asset',
+        'title' => 'title',
+        'description' => 'description',
+    );
+  }
 
-		$criteria = new CDbCriteria;
+  /**
+   * Retrieves a list of models based on the current search/filter conditions.
+   * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+   */
+  public function search() {
+    // Warning: Please modify the following code to remove attributes that
+    // should not be searched.
 
-		$criteria->compare('id', $this->id, true);
-		$criteria->compare('event_id', $this->event_id, true);
-		$criteria->compare('asset_id', $this->asset_id);
-		$criteria->compare('title', $this->title);
-		$criteria->compare('description', $this->description);
-		
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria' => $criteria,
-		));
-	}
+    $criteria = new CDbCriteria;
+
+    $criteria->compare('id', $this->id, true);
+    $criteria->compare('event_id', $this->event_id, true);
+    $criteria->compare('asset_id', $this->asset_id);
+    $criteria->compare('title', $this->title);
+    $criteria->compare('description', $this->description);
+
+    return new CActiveDataProvider(get_class($this), array(
+                'criteria' => $criteria,
+            ));
+  }
+
+  /**
+   * This method uses reflection to load the module specified by the image
+   * type.
+   * 
+   * @param string $imageType the type of image to use; this is important
+   * and is used in the reflective part to load a module named
+   * OphScImage[imageType].
+   * 
+   * @param int $assetId the asset to obtain.
+   * 
+   * @return null
+   */
+  public function getScannedDocument($patient_id, $assetId, $params) {
+    $eye = 'L';
+    if ($params) {
+      $eye = $params['eye'];
+    }
+    $exam_criteria = new CDbCriteria;
+    $exam_criteria->condition = FsFile::model()->tableName() . '.asset_id=' . $assetId;
+    $exam_criteria->join =
+            ' left join ' . FsFile::model()->tableName()
+            . ' on ' . 'file_id=' . FsFile::model()->tableName()
+            . '.id'
+    ;
+    try {
+      $f = $exam_criteria->condition;
+      $r = $exam_criteria->join;
+      $data = FsScanHumphreyImage::model()->find($exam_criteria);
+    } catch (Exception $e) {
+      $foo = $e;
+    }
+    return $data;
+  }
+
+  /**
+   * 
+   * @param type $imageType
+   */
+  public static function getScannedDocuments($pid, $params) {
+    $condition =  'pid=\'' . $pid . '\'';
+    if ($params) {
+      $eye = $params['eye'];
+      $strategy = $params['strategy'];
+      if ($strategy) {
+        $condition = $condition . ' and test_strategy=\'' . $strategy . '\'';
+      }
+    } else {
+      // set some defaults:
+      $eye = 'L';
+    }
+    $exam_criteria = new CDbCriteria;
+    $exam_criteria->condition = $condition . ' and eye=\'' . $eye . '\'';
+    return FsScanHumphreyXml::model()->findAll($exam_criteria);
+  }
+
 }
