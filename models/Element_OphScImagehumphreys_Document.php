@@ -163,9 +163,11 @@ class Element_OphScImagehumphreys_Document extends ElementScannedDocument {
     $condition =  'pid=\'' . $pid . '\'';
     if ($params) {
       $eye = $params['eye'];
-      $strategy = $params['strategy'];
-      if ($strategy) {
-        $condition = $condition . ' and test_strategy=\'' . $strategy . '\'';
+      if (isset($params['strategy'])) {
+        $strategy = $params['strategy'];
+        if ($strategy) {
+          $condition = $condition . ' and test_strategy=\'' . $strategy . '\'';
+        }
       }
     } else {
       // set some defaults:
