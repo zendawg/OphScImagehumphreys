@@ -131,26 +131,15 @@ class Element_OphScImagehumphreys_Document extends ElementScannedDocument {
    * 
    * @param int $assetId the asset to obtain.
    * 
-   * @return null
+   * @return the Humphrey image object if it existed; null otherwise.
    */
-  public function getScannedDocument($patient_id, $assetId, $params) {
-    $eye = 'L';
-    if ($params) {
-      $eye = $params['eye'];
-    }
+  public function getScannedDocument($assetId) {
     $exam_criteria = new CDbCriteria;
-    $exam_criteria->condition = FsFile::model()->tableName() . '.asset_id=' . $assetId;
-    $exam_criteria->join =
-            ' left join ' . FsFile::model()->tableName()
-            . ' on ' . 'file_id=' . FsFile::model()->tableName()
-            . '.id'
-    ;
+    $exam_criteria->condition = 'asset_id=' . $assetId;
     try {
-      $f = $exam_criteria->condition;
-      $r = $exam_criteria->join;
       $data = FsScanHumphreyImage::model()->find($exam_criteria);
     } catch (Exception $e) {
-      $foo = $e;
+      
     }
     return $data;
   }
@@ -168,6 +157,10 @@ class Element_OphScImagehumphreys_Document extends ElementScannedDocument {
         if ($strategy) {
           $condition = $condition . ' and test_strategy=\'' . $strategy . '\'';
         }
+      }
+      if (isset($params['associated'])) {
+        $associated = $params['associated'];
+        $condition = $condition . ' and associated=' . $associated;
       }
     } else {
       // set some defaults:
