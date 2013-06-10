@@ -126,7 +126,7 @@ class FsScanHumphreyImage extends CActiveRecord
      * Create an associated asset
      * @return type
      */
-    public function save() {
+    public function beforeSave() {
       if (!$this->asset) {
         $asset = new Asset;
         $asset->file_id=$this->file_id;
@@ -137,6 +137,6 @@ class FsScanHumphreyImage extends CActiveRecord
         $asset->save();
         $this->asset_id = $asset->id;
       }
-      return parent::save();
+      return parent::beforeSave();
     }
 }
