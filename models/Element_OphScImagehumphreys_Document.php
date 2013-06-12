@@ -129,13 +129,13 @@ class Element_OphScImagehumphreys_Document extends ElementScannedDocument {
    * and is used in the reflective part to load a module named
    * OphScImage[imageType].
    * 
-   * @param int $assetId the asset to obtain.
+   * @param int $fileId the file to obtain.
    * 
    * @return the Humphrey image object if it existed; null otherwise.
    */
-  public function getScannedDocument($assetId) {
+  public function getScannedDocument($fileId) {
     $exam_criteria = new CDbCriteria;
-    $exam_criteria->condition = 'asset_id=' . $assetId;
+    $exam_criteria->condition = 'file_id=' . $fileId;
     try {
       $data = FsScanHumphreyImage::model()->find($exam_criteria);
     } catch (Exception $e) {
