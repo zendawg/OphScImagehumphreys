@@ -76,7 +76,7 @@ class FsScanHumphreyImage extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'file' => array(self::BELONGS_TO, 'FsFile', 'file_id'),
-			'asset' => array(self::BELONGS_TO, 'Asset', 'asset_id'),
+			'xml' => array(self::BELONGS_TO, 'FsScanHumphreyXml', 'xml_id'),
 			'createdUser' => array(self::BELONGS_TO, 'User', 'created_user_id'),
 			'lastModifiedUser' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
 		);
@@ -115,28 +115,10 @@ class FsScanHumphreyImage extends CActiveRecord
 		$criteria->compare('created_user_id',$this->created_user_id,true);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('file_id',$this->file_id,true);
-		$criteria->compare('asset_id',$this->asset_id,true);
+		$criteria->compare('xml_id',$this->xml_id,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-    
-    /**
-     * Create an associated asset
-     * @return type
-     */
-    public function beforeSave() {
-      if (!$this->asset) {
-        $asset = new Asset;
-        $asset->file_id=$this->file_id;
-        if ($this->file) {
-          $asset->name=$this->file->name;
-        }
-        $asset->mimetype="image/tiff";
-        $asset->save();
-        $this->asset_id = $asset->id;
-      }
-      return parent::beforeSave();
-    }
 }
