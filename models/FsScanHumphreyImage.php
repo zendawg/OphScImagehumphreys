@@ -121,4 +121,15 @@ class FsScanHumphreyImage extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    /**
+     * 
+     * @param type $file
+     * @param type $subdir
+     * @return type
+     */
+    public function getPath($subdir = '') {
+      $realPath = explode(':', Yii::app()->params['esb_rest_api_file_system_paths']['humphreys'])[0];
+      $oePath = explode(':', Yii::app()->params['esb_rest_api_file_system_paths']['humphreys'])[1];
+      return str_replace($realPath, $oePath, $this->file->dir->path) . '/' . $subdir;
+    }
 }
