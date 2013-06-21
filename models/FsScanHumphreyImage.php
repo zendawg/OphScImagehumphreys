@@ -128,8 +128,16 @@ class FsScanHumphreyImage extends CActiveRecord
      * @return type
      */
     public function getPath($subdir = '') {
-      $realPath = explode(':', Yii::app()->params['esb_rest_api_file_system_paths']['humphreys'])[0];
-      $oePath = explode(':', Yii::app()->params['esb_rest_api_file_system_paths']['humphreys'])[1];
-      return str_replace($realPath, $oePath, $this->file->dir->path) . '/' . $subdir;
+      $path = null;
+      if (Yii::app()->params['esb_rest_api_file_system_paths']) {
+        $path = Yii::app()->params['esb_rest_api_file_system_paths'];
+        if ($path['humphreys']) {
+          $vfaPath = explode(':', $path['humphreys']);
+          $realPath = $vfaPath[0];
+          $oePath = $vfaPath[1];
+          $path = str_replace($realPath, $oePath, $this->file->dir->path) . '/' . $subdir;
+        }
+      }
+      return $path;
     }
 }
